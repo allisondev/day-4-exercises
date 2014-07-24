@@ -1,22 +1,26 @@
-<?php
-
-$city = $_GET['city'];
-
-?>
 
 <h1>Welcome to Population Data Online</h1>
 
 <?php
 
-$cities = array(
-  'New York'      => 8405837,
-  'Boston'        => 636479,
-  'Philadelphia'  => 1526006,
-  'Seattle'       => 634535,
-  'Houston'       => 2161000,
+//Connect to MySQL
+$connection = mysql_connect('localhost', 'root', '');
 
-);
+//Select 'day_4_exercises'
+mysql_select_db('day_4_exercises');
 
+//Check Connection
+if(!$connection){
+  die('Failed to connec to MySQL: ' . mysql_connect_error());
+}
+
+//Get result from the 'population' table
+$result = mysql_query("SELECT city_name, population FROM population");
+
+//Get city from the URL
+$city = $_GET['city'];
+
+//Check if city was provided in URL
 if (!$city || !isset($cities[$city])) {
 
   print 'Please add a city name to your URL. Try <a
@@ -25,19 +29,25 @@ if (!$city || !isset($cities[$city])) {
 }
 else {
 
-  print 'The population of <strong>'. $city . '</strong> is <strong>' . $cities[$city] . '</strong>.</p>';
+  //Loop through all query results to find match with $city input from URL
+  while($row = mysql_fetch_array($result)){
+    if ($row['city_name'] === $city){
+      
+      print 'The population of <strong>'. $city . '</strong> is <strong>' . $for['population'] . '</strong>.</p>';
 
+    }
+
+  }
 }
 
+print '<h2>Try these cities:</h2>';
+print '<ul>';
+
+//Loop through all cities to create list of links
+while($row = mysql_fetch_array($result)){
+    echo '<li><a href="/population.php?city=' . $row['city_name'] . '">' . $row['city_name'] . '</a></li>';
+}
+
+print '</ul>';
 
 ?>
-
-<h2>Valid Cities:</h2>
-<ul>
-   <?php
-     foreach($cities as $location => $pop_key){
-       print '<li><a href="/population.php?city=' . $location . '">' . $location . '</a></li>';
-     }
-   ?>
-</ul>
-
