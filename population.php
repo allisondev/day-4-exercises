@@ -21,19 +21,20 @@ $result = mysql_query("SELECT city_name, population FROM population");
 $city = $_GET['city'];
 
 //Check if city was provided in URL
-if (!$city || !isset($cities[$city])) {
+if (!$city) {
 
   print 'Please add a city name to your URL. Try <a
-          href="/population.php?city=Philadelphia">Philadelphia</a>.';
+          href="/day-4-exercises/population.php?city=Philadelphia">Philadelphia</a>.';
 
 }
 else {
 
   //Loop through all query results to find match with $city input from URL
   while($row = mysql_fetch_array($result)){
+
     if ($row['city_name'] === $city){
       
-      print 'The population of <strong>'. $city . '</strong> is <strong>' . $for['population'] . '</strong>.</p>';
+      print "The population of <strong>". $city . "</strong> is <strong>" . $row['population'] . "</strong>.</p>";
 
     }
 
@@ -43,9 +44,11 @@ else {
 print '<h2>Try these cities:</h2>';
 print '<ul>';
 
+$result = mysql_query('SELECT city_name, population FROM population');
+
 //Loop through all cities to create list of links
 while($row = mysql_fetch_array($result)){
-    echo '<li><a href="/population.php?city=' . $row['city_name'] . '">' . $row['city_name'] . '</a></li>';
+    print "<li><a href='/day-4-exercises/population.php?city=" . $row['city_name'] . "'>" . $row['city_name'] . "</a></li>";
 }
 
 print '</ul>';
