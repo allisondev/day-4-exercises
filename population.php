@@ -11,7 +11,7 @@ mysql_select_db('day_4_exercises');
 
 //Check Connection
 if(!$connection){
-  die('Failed to connec to MySQL: ' . mysql_connect_error());
+  die('Failed to connec to MySQL: ' . mysql_errno());
 }
 
 //Get result from the 'population' table
